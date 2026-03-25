@@ -1,0 +1,89 @@
+---
+title: "Homework8"
+output: 
+  html_document:
+    code_folding: hide
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+```
+
+
+### Question 1
+
+```{r}
+studentsurvey<-Lock5Data::StudentSurvey %>%
+ mutate(BMI = round(701 * (Weight / Height^2), 1))%>% 
+  select(Sex, Weight, Height, BMI)
+
+studentsurvey%>% head(6) %>% knitr::kable()
+ 
+```
+
+^[Question 1 complete]
+
+### Question 2
+
+```{r}
+Status_weight<-studentsurvey%>%
+  mutate(
+    Status = cut(
+      BMI, 
+      breaks = c(-Inf, 18.5, 25.0, 30.0, Inf), 
+      labels = c("Underweight", "Healthy Weight", "Overweight", "Obese"),
+      right=TRUE
+    )
+  )
+
+Status_weight%>% head(6) %>% knitr::kable()
+```
+
+^[Question 2 complete]
+
+
+### Question 3 
+
+```{r}
+bmi_summary <- studentsurvey%>%
+  group_by(Sex) %>%
+  summarize(
+    Min_BMI = min(BMI, na.rm = TRUE),
+    Max_BMI = max(BMI, na.rm = TRUE)
+  )
+
+bmi_summary%>% knitr::kable()
+```
+
+^[Question 3 complete]
+
+
+### Question 4
+
+```{r}
+SATs<-Lock5Data::StudentSurvey %>% 
+  mutate(Best_SAT = pmax(VerbalSAT, MathSAT, na.rm = TRUE)) %>%
+  select(VerbalSAT, MathSAT, Best_SAT)
+
+SATs%>% head(6) %>%knitr::kable()
+
+```
+
+^[Question 4 complete]
+
+
+### Question 5
+
+
+```{r}
+SAT_sd <- Lock5Data::StudentSurvey %>%
+  mutate(
+    SAT_zscore = (SAT - mean(SAT)) / sd(SAT)) %>%
+  select(SAT, SAT_zscore)
+
+SAT_sd%>% head(6) %>% knitr::kable()
+```
+
+
+^[Question 5 complete]
